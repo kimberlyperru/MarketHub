@@ -1,201 +1,215 @@
 package com.perru.markethub.ui.screens.payment
 
-
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.perru.markethub.ui.theme.newyellow
 
+// Premium red color palette implementation
+val MainRed = Color(0xFFD32F2F)
+val BgLight = Color(0xFFFBF9FA)
+val TextDark = Color(0xFF1A1A2E)
+val TextGray = Color(0xFF7D7D8E)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PaymentScreen(@Suppress("UNUSED_PARAMETER") navController: NavController){
-
+fun PaymentScreen(navController: NavController) {
     val mContext = LocalContext.current
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Checkout", fontWeight = FontWeight.Bold, fontSize = 20.sp) },
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.White,
+                    titleContentColor = TextDark,
+                    navigationIconContentColor = TextDark
+                )
+            )
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(BgLight)
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-        //TopAppBar
-
-        TopAppBar(
-            title = { Text(text = "Payment") },
-            navigationIcon = {
-                IconButton(onClick = {})  {
-                    Icon(
-                        imageVector = Icons.Default.Menu,
-                        contentDescription = "Menu"
-                    )
+            // SECTION 1: Order Summary Card
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+            ) {
+                Column(modifier = Modifier.padding(18.dp)) {
+                    Text(text = "Order Summary", fontSize = 14.sp, color = TextGray, fontWeight = FontWeight.Medium)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = "Total Payable Amount", fontSize = 16.sp, color = TextDark, fontWeight = FontWeight.SemiBold)
+                        Text(text = "KES 4,500.00", fontSize = 22.sp, color = MainRed, fontWeight = FontWeight.Bold)
+                    }
                 }
-            },
+            }
 
-            actions = {
+            Spacer(modifier = Modifier.height(24.dp))
 
-                IconButton(onClick = {})  {
-                    Icon(
-                        imageVector = Icons.Default.ShoppingCart,
-                        contentDescription = "Cart"
-                    )
-                }
+            // SECTION 2: Payment Selector Option Groups
+            Text(
+                text = "Select Payment Method",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = TextDark,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(12.dp))
 
-
-                IconButton(onClick = {})  {
-                    Icon(
-                        imageVector = Icons.Default.Notifications,
-                        contentDescription = "Notifications"
-                    )
-                }
-
-
-            },
-
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = newyellow,
-                navigationIconContentColor = Color.White,
-                titleContentColor = Color.White,
-                actionIconContentColor = Color.White
+            PaymentMethodTile(
+                title = "M-Pesa Express (STK)",
+                subtitle = "Pay directly via Sim Toolkit",
+                icon = Icons.Default.PhoneAndroid,
+                onClick = { mpesa(mContext) }
             )
 
-        )
+            Spacer(modifier = Modifier.height(10.dp))
 
+            PaymentMethodTile(
+                title = "Credit or Debit Card",
+                subtitle = "Visa, Mastercard, Google Pay",
+                icon = Icons.Default.CreditCard,
+                onClick = { /* Handle Payment Gateways integration */ }
+            )
 
-        //End of TopAppbar
+            Spacer(modifier = Modifier.height(28.dp))
 
-        Spacer(modifier = Modifier.height(20.dp))
+            // SECTION 3: Bottom Order Assistance Tray (The intents clean relocation)
+            Text(
+                text = "Need assistance with your order?",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = TextGray,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(16.dp))
 
-        //STK
-        Button(
-            onClick = {
-                val simToolKitLaunchIntent =
-                    mContext.packageManager.getLaunchIntentForPackage("com.android.stk")
-                simToolKitLaunchIntent?.let { mContext.startActivity(it) }
-
-            },
-            shape = RoundedCornerShape(10.dp),
-            colors = ButtonDefaults.buttonColors(newyellow),
-            modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
-        ) {
-            Text(text = "Mpesa")
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                SupportIconAction(icon = Icons.Default.Call, label = "Call", onClick = { call(mContext) })
+                SupportIconAction(icon = Icons.Default.MailOutline, label = "Email", onClick = { email(mContext) })
+                SupportIconAction(icon = Icons.Default.Share, label = "Share", onClick = { share(mContext) })
+                SupportIconAction(icon = Icons.Default.PhotoCamera, label = "Receipt", onClick = { camera(mContext) })
+            }
         }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        //Call
-        Button(
-            onClick = {
-                val callIntent= Intent(Intent.ACTION_DIAL)
-                callIntent.data="tel:0725766883".toUri()
-                mContext.startActivity(callIntent)
-            },
-            shape = RoundedCornerShape(10.dp),
-            colors = ButtonDefaults.buttonColors(newyellow),
-            modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
-        ) {
-            Text(text = "Call")
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        //SMS
-        Button(
-            onClick = {
-                val smsIntent=Intent(Intent.ACTION_SENDTO)
-                smsIntent.data="sms to:0725766883".toUri()
-                smsIntent.putExtra("sms_body","Hello ,how was your day?")
-                mContext.startActivity(smsIntent)
-            },
-            shape = RoundedCornerShape(10.dp),
-            colors = ButtonDefaults.buttonColors(newyellow),
-            modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
-        ) {
-            Text(text = "Send Message")
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        //Email
-        Button(
-            onClick = {
-                val shareIntent = Intent(Intent.ACTION_SEND)
-                shareIntent.type = "text/plain"
-                shareIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("perru@gmail.com"))
-                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "subject")
-                shareIntent.putExtra(Intent.EXTRA_TEXT, "Hello, this is the email body")
-                mContext.startActivity(shareIntent)
-            },
-            shape = RoundedCornerShape(10.dp),
-            colors = ButtonDefaults.buttonColors(newyellow),
-            modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
-        ) {
-            Text(text = "Email Us")
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        //SHARE
-        Button(
-            onClick = {
-                val shareIntent=Intent(Intent.ACTION_SEND)
-                shareIntent.type="text/plain"
-                shareIntent.putExtra(Intent.EXTRA_TEXT, "https://github.com/kimberlyperru")
-                mContext.startActivity(Intent.createChooser(shareIntent, "Share"))
-            },
-            shape = RoundedCornerShape(10.dp),
-            colors = ButtonDefaults.buttonColors(newyellow),
-            modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
-        ) {
-            Text(text = "Share")
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        //CAMERA
-        Button(
-            onClick = {
-                val cameraIntent=Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                if (cameraIntent.resolveActivity(mContext.packageManager)!=null){
-                    mContext.startActivity(cameraIntent)
-                }else{
-                    println("Camera app is not available")
-                }
-            },
-            shape = RoundedCornerShape(10.dp),
-            colors = ButtonDefaults.buttonColors(newyellow),
-            modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
-        ) {
-            Text(text = "Camera")
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 
-// Separate functions for button logic
+@Composable
+fun PaymentMethodTile(
+    title: String,
+    subtitle: String,
+    icon: ImageVector,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
+        shape = RoundedCornerShape(14.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(42.dp)
+                    .background(MainRed.copy(alpha = 0.08f), CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(imageVector = icon, contentDescription = title, tint = MainRed, modifier = Modifier.size(20.dp))
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(text = title, fontWeight = FontWeight.Bold, fontSize = 15.sp, color = TextDark)
+                Text(text = subtitle, fontSize = 12.sp, color = TextGray)
+            }
+            Icon(imageVector = Icons.Default.CheckCircle, contentDescription = "Select", tint = MainRed.copy(alpha = 0.3f))
+        }
+    }
+}
+
+@Composable
+fun SupportIconAction(
+    icon: ImageVector,
+    label: String,
+    onClick: () -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .clickable { onClick() }
+            .padding(8.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .size(46.dp)
+                .background(Color.White, CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(imageVector = icon, contentDescription = label, tint = TextDark, modifier = Modifier.size(20.dp))
+        }
+        Spacer(modifier = Modifier.height(6.dp))
+        Text(text = label, fontSize = 12.sp, fontWeight = FontWeight.Medium, color = TextDark)
+    }
+}
+
+// System Intent Logic Wrapper implementations
 
 fun mpesa(context: Context) {
     val simToolKitLaunchIntent = context.packageManager.getLaunchIntentForPackage("com.android.stk")
@@ -203,22 +217,18 @@ fun mpesa(context: Context) {
 }
 
 fun call(context: Context) {
-    val intent = Intent(Intent.ACTION_DIAL)
-    intent.data = Uri.parse("tel:0700000000")
-    context.startActivity(intent)
-}
-
-fun sms(context: Context) {
-    val uri = Uri.parse("smsto:0700000000")
-    val intent = Intent(Intent.ACTION_SENDTO, uri)
-    intent.putExtra("sms_body", "Hello, I have a query...")
+    val intent = Intent(Intent.ACTION_DIAL).apply {
+        data = "tel:0725766883".toUri()
+    }
     context.startActivity(intent)
 }
 
 fun email(context: Context) {
-    val intent = Intent(Intent.ACTION_SENDTO).apply {
-        data = Uri.parse("mailto:support@markethub.com")
-        putExtra(Intent.EXTRA_SUBJECT, "Support Inquiry")
+    val intent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_EMAIL, arrayOf("perru@gmail.com"))
+        putExtra(Intent.EXTRA_SUBJECT, "MarketHub Payment Inquiry")
+        putExtra(Intent.EXTRA_TEXT, "Hello, writing to verify my receipt status...")
     }
     context.startActivity(intent)
 }
@@ -226,9 +236,9 @@ fun email(context: Context) {
 fun share(context: Context) {
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
-        putExtra(Intent.EXTRA_TEXT, "Check out MarketHub!")
+        putExtra(Intent.EXTRA_TEXT, "https://github.com/kimberlyperru")
     }
-    context.startActivity(Intent.createChooser(intent, "Share via"))
+    context.startActivity(Intent.createChooser(intent, "Share Store Link"))
 }
 
 fun camera(context: Context) {
@@ -236,9 +246,8 @@ fun camera(context: Context) {
     context.startActivity(intent)
 }
 
-
 @Preview(showBackground = true)
 @Composable
-fun PaymentScreenPreview(){
+fun PaymentScreenPreview() {
     PaymentScreen(rememberNavController())
 }

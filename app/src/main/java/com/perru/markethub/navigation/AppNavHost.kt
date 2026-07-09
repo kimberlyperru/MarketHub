@@ -10,11 +10,14 @@ import com.perru.markethub.ui.screens.onboarding.OnboardingScreen1
 import com.perru.markethub.ui.screens.onboarding.OnboardingScreen2
 import com.perru.markethub.ui.screens.onboarding.OnboardingScreen3
 import com.perru.markethub.ui.screens.about.AboutScreen
+import com.perru.markethub.ui.screens.auth.LoginScreen
+import com.perru.markethub.ui.screens.auth.RegisterScreen
 import com.perru.markethub.ui.screens.home.HomeScreen
 import com.perru.markethub.ui.screens.home.HomeScreen2
 import com.perru.markethub.ui.screens.onboarding.OnboardingScreen2Preview
 import com.perru.markethub.ui.screens.payment.PaymentScreen
 import com.perru.markethub.ui.screens.scaffold.ScaffoldScreen
+import com.perru.markethub.ui.screens.services.ServicesScreen
 import com.perru.markethub.ui.screens.splash.SplashScreen
 
 
@@ -22,7 +25,7 @@ import com.perru.markethub.ui.screens.splash.SplashScreen
 fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = ROUT_ONBOARDING3
+    startDestination: String = ROUT_SPLASH
 ) {
 
     NavHost(
@@ -43,9 +46,9 @@ fun AppNavHost(
         composable(ROUT_PAYMENT) {
             PaymentScreen(navController)
         }
-      //  composable(ROUT_SERVICES) {
-       //     ServicesScreen(navController)
-       // }
+      composable(ROUT_SERVICES) {
+           ServicesScreen(navController)
+       }
 
         composable(ROUT_ONBOARDING1) {
             OnboardingScreen1(navController)
@@ -62,10 +65,12 @@ fun AppNavHost(
         composable(ROUT_SCAFFOLD) {
             ScaffoldScreen(navController)
         }
-
-
-
-
+        composable(ROUT_REGISTER) {
+            RegisterScreen(navController)
+        }
+        composable(ROUT_LOGIN) {
+            LoginScreen(navController)
+        }
 
         }
     }

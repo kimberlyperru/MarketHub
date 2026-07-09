@@ -121,6 +121,7 @@ fun ScaffoldScreen(navController: NavController) {
 }
 
 @Preview(showBackground = true)
+
 @Composable
 fun ScaffoldScreenPreview() {
     ScaffoldScreen(rememberNavController())

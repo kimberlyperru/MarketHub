@@ -2,12 +2,12 @@ package com.perru.markethub.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
+val Red80 = Color(0xFFFFB4AB)
+val RedGrey80 = Color(0xFFE7BDB7)
 val Pink80 = Color(0xFFEFB8C8)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
+val Red40 = Color(0xFFBA1A1A)
+val RedGrey40 = Color(0xFF93000A)
 val Pink40 = Color(0xFF7D5260)
 val Pretty = Color(0xFF4B1F2B)
 val newyellow = Color(0xFFFDC912)
