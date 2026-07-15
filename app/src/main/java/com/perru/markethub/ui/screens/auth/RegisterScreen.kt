@@ -40,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import kotlin.OptIn
 import androidx.navigation.compose.rememberNavController
 import com.perru.markethub.R
 import com.perru.markethub.navigation.ROUT_LOGIN
@@ -156,7 +157,10 @@ fun RegisterScreen(navController: NavController) {
 
         Button(
             onClick = {
-                navController.navigate(ROUT_LOGIN)
+
+
+
+
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
             shape = RoundedCornerShape(16.dp),

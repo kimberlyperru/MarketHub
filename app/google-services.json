@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1007458516437",
+    "project_id": "markethub-7feae",
+    "storage_bucket": "markethub-7feae.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1007458516437:android:2acb1351550ebf455c115c",
+        "android_client_info": {
+          "package_name": "com.perru.markethub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsV407nQjslCIeaXhFQnEuR-eDqsiV9SI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

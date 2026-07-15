@@ -16,5 +16,8 @@ const val ROUT_REGISTER= "register"
 
 const val ROUT_LOGIN= "login"
 
+const val ROUT_ITEM = "item"
+const val ROUT_ADMINDASHBOARD = "admindashboard"
+
 
 
