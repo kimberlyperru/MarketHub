@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -43,6 +44,7 @@ import androidx.navigation.NavController
 import kotlin.OptIn
 import androidx.navigation.compose.rememberNavController
 import com.perru.markethub.R
+import com.perru.markethub.data.AuthViewModel
 import com.perru.markethub.navigation.ROUT_LOGIN
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -155,9 +157,12 @@ fun RegisterScreen(navController: NavController) {
         )
         Spacer(modifier = Modifier.height(20.dp))
 
+        val context = LocalContext.current
+        val authViewModel = AuthViewModel(navController, context)
+
         Button(
             onClick = {
-
+                authViewModel.signup(username, email, password,confirmpassword)
 
 
 

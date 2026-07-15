@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -42,6 +43,7 @@ import androidx.navigation.NavController
 import kotlin.OptIn
 import androidx.navigation.compose.rememberNavController
 import com.perru.markethub.R
+import com.perru.markethub.data.AuthViewModel
 import com.perru.markethub.navigation.ROUT_HOME
 import com.perru.markethub.navigation.ROUT_REGISTER
 
@@ -112,8 +114,17 @@ fun LoginScreen(navController: NavController) {
         )
         Spacer(modifier = Modifier.height(20.dp))
 
+        // Login Button
+        val context = LocalContext.current
+        val authViewModel = AuthViewModel(navController, context)
+
+
         Button(
-            onClick = { navController.navigate(ROUT_HOME) },
+            onClick = {
+                authViewModel.login(email, password)
+
+
+            },
             modifier = Modifier.width(350.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
         ) {
