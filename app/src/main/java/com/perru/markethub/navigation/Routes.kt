@@ -18,6 +18,13 @@ const val ROUT_LOGIN= "login"
 
 const val ROUT_ITEM = "item"
 const val ROUT_ADMINDASHBOARD = "admindashboard"
+const val ROUT_UPLOAD_ORDER= "uploadorder"
+const val ROUT_VIEW_ORDER= "vieworder"
+
+//CRUD
+const val ROUTE_ADD_PRODUCT = "addproduct"
+const val ROUTE_VIEW_PRODUCTS = "viewproducts"
+const val ROUTE_UPDATE_PRODUCT = "update_product/{productId}"
 
 
 

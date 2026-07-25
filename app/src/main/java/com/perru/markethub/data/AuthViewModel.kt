@@ -10,6 +10,8 @@ import com.perru.markethub.navigation.ROUT_REGISTER
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.perru.markethub.navigation.ROUT_UPLOAD_ORDER
+import com.perru.markethub.navigation.ROUT_VIEW_ORDER
 
 class AuthViewModel(var navController: NavController, var context: Context) {
     private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -79,9 +81,9 @@ class AuthViewModel(var navController: NavController, var context: Context) {
                         Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
 
                         if (role == "admin") {
-                            navController.navigate(ROUT_PAYMENT)
+                            navController.navigate(ROUT_VIEW_ORDER)
                         } else {
-                            navController.navigate(ROUT_HOME)
+                            navController.navigate(ROUT_UPLOAD_ORDER)
                         }
 
                     }.addOnFailureListener {

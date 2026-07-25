@@ -1,4 +1,4 @@
-package com.perru.markethub.ui.screens.services
+package com.perru.markethub.ui.screens.service
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
